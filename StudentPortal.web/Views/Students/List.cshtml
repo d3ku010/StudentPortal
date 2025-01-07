@@ -14,7 +14,7 @@
             <th>Id</th>
             <th>Name</th>
             <th>Email</th>
-            <th> </th>
+            <th>Club</th>
         </tr>
     </thead>
 
@@ -25,6 +25,7 @@
                 <td>@student.Id</td>
                 <td>@student.Name</td>
                 <td>@student.Email</td>
+                <td>@student.Club</td>
                 <td>
                     <a class="btn btn-primary" asp-controller="Students" asp-action="Edit" asp-route-id="@student.Id">Edit</a>
                 </td>
