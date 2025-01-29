@@ -67,7 +67,7 @@ The **StudentPortal** is a web application designed to manage student records. U
 2. **Navigate to the project directory**:
    After cloning, navigate to the project folder:
    ```bash
-    cd CRUDwithDapper
+    cd StudentPortal/StudentPortal.web
     ```
     
 4. **Restore .NET dependencies**:
