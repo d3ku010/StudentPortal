@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using StudentPortal.web.Data;
+using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => 
-options.UseSqlServer(builder.Configuration.GetConnectionString("StudentPortal")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("StudentPortal")));
 
 var app = builder.Build();
 

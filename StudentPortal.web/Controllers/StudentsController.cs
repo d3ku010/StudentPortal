@@ -43,6 +43,8 @@ namespace StudentPortal.web.Controllers
         [HttpGet]
         public async Task<IActionResult> List()
         {
+            LogEvents.LogToFile("Title", "Total records fetched " + dbContext.Students.Count());
+
             var students = await dbContext.Students.ToListAsync();
             
             return View(students);
