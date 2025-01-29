@@ -96,16 +96,16 @@ The **StudentPortal** is a web application designed to manage student records. U
 
 ## Usage
 
-1. **Add a Student:
+1. Add a Student:
   Navigate to the "Add Student" page, enter the required details (Name, Email, Phone, Club), and submit the form.
   
-2. **View Students:
+2. View Students:
   The homepage lists all students stored in the database with their details.
   
-3. **Edit a Student:
+3. Edit a Student:
   Click "Edit" next to a student’s name to update their information.
 
-4. **Delete a Student:
+4. Delete a Student:
   Click "Delete" next to a student’s entry to remove their record from the database.
 
 
