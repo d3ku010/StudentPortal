@@ -65,10 +65,16 @@ The **StudentPortal** is a web application designed to manage student records. U
    ```
 
 2. **Restore .NET dependencies**:
+     Restore the required NuGet packages:
+    ```bash
+    dotnet restore
+    ```
+    
+3. **Restore .NET dependencies**:
     ```bash
    dotnet restore
     ```
-3. **Configure the database**:
+4. **Configure the database**:
     Open appsettings.json and configure the connection string to point to your SQL Server instance:
    ```json
    "ConnectionStrings": {
@@ -76,19 +82,19 @@ The **StudentPortal** is a web application designed to manage student records. U
     }
     ```
    
-4. **Apply Entity Framework migrations**:
+5. **Apply Entity Framework migrations**:
    Create the database and apply the initial schema using the following commands:
     ```bash
     dotnet ef migrations add InitialCreate
     dotnet ef database update
     ```
 
-5. **Run the application**:
+6. **Run the application**:
     Run the project using Visual Studio or the .NET CLI:
     ```bash
     dotnet run
     ```
-6. **Access the application**:
+7. **Access the application**:
    After the application is running, open your browser and navigate to http://localhost:5000 (or the port specified in the output).
 
 
