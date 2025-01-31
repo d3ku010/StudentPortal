@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentPortal.web.Data;
+using StudentPortal.web.Log;
 using StudentPortal.web.Models;
 using StudentPortal.web.Models.Entities;
 
@@ -10,14 +11,20 @@ namespace StudentPortal.web.Controllers
     {
         private readonly ApplicationDbContext dbContext;
 
-        public StudentsController(ApplicationDbContext dbContext)
+        private readonly ILoggingService _logger;
+
+        public StudentsController(ApplicationDbContext dbContext, ILoggingService logger)
         {
             this.dbContext = dbContext;
+            _logger = logger;
         }
+
+
 
         [HttpGet]
         public IActionResult Add()
         {
+            _logger.LogInfo("Add student page loaded");
             return View();
         }
 
@@ -35,7 +42,7 @@ namespace StudentPortal.web.Controllers
             await dbContext.Students.AddAsync(student);
             await dbContext.SaveChangesAsync();
 
-
+            _logger.LogInfo("Student added");
 
             return RedirectToAction("List", "Students");
         }
@@ -46,7 +53,7 @@ namespace StudentPortal.web.Controllers
             LogEvents.LogToFile("Title", "Total records fetched " + dbContext.Students.Count());
 
             var students = await dbContext.Students.ToListAsync();
-            
+            _logger.LogInfo("List of students fetched");
             return View(students);
 
         }
@@ -55,7 +62,7 @@ namespace StudentPortal.web.Controllers
         public async Task<IActionResult> Edit(Guid id)
         {
             var student = await dbContext.Students.FindAsync(id);
-
+            _logger.LogInfo("Edit student page loaded");
             return View(student);
         }
 
@@ -73,7 +80,7 @@ namespace StudentPortal.web.Controllers
 
                 await dbContext.SaveChangesAsync();
             }
-
+            _logger.LogInfo("Student updated");
             return RedirectToAction("List", "Students");
         }
 
@@ -89,7 +96,7 @@ namespace StudentPortal.web.Controllers
                 dbContext.Students.Remove(student);
                 await dbContext.SaveChangesAsync();
             }
-
+            _logger.LogInfo("Student deleted");
             return RedirectToAction("List", "Students");
 
         }

@@ -1,36 +1,56 @@
 using Microsoft.EntityFrameworkCore;
 using StudentPortal.web.Data;
-using Microsoft.Extensions.Logging;
+using StudentPortal.web.Log; // Ensure this contains ILoggingService & LoggingService
 using NLog;
 using NLog.Web;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-
-builder.Services.AddDbContext<ApplicationDbContext>(options => 
-    options.UseSqlServer(builder.Configuration.GetConnectionString("StudentPortal")));
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+try
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    logger.Info("Application Starting");
+    var builder = WebApplication.CreateBuilder(args);
+
+    // Configure NLog
+    builder.Logging.ClearProviders();
+    builder.Host.UseNLog();
+
+    // Register services
+    builder.Services.AddControllersWithViews();
+
+    // Register LoggingService as ILoggingService
+    builder.Services.AddSingleton<ILoggingService, LoggingService>();
+
+    // Register DbContext
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("StudentPortal")));
+
+    var app = builder.Build();
+
+    // Configure the HTTP request pipeline
+    if (!app.Environment.IsDevelopment())
+    {
+        app.UseExceptionHandler("/Home/Error");
+        app.UseHsts();
+    }
+
+    app.UseHttpsRedirection();
+    app.UseStaticFiles();
+    app.UseRouting();
+    app.UseAuthorization();
+
+    app.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    app.Run();
+
 }
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.Run();
+catch (Exception ex)
+{
+    logger.Error(ex, "Application failed to start");
+    throw;
+}
+finally
+{
+    LogManager.Shutdown();
+}
