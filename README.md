@@ -7,7 +7,8 @@
 4. [Technology Stack](#technology-stack)
 5. [System Requirements](#system-requirements)
 6. [Setup and Installation](#setup-and-installation)
-7. [Usage](#usage)
+7. [Logging](#logging)
+8. [Usage](#usage)
 
 ---
 
@@ -23,6 +24,7 @@ The **StudentPortal** is a web application designed to manage student records. U
 - Implement **CRUD** operations for adding, viewing, editing, and deleting student information.
 - Use **Entity Framework** for database interaction and automatic schema management.
 - Provide a simple user interface using **Bootstrap**.
+- Implement **NLog** for logging application events and errors.
 
 ---
 
@@ -34,6 +36,7 @@ The **StudentPortal** is a web application designed to manage student records. U
 - **Delete Students**: Remove student records from the database.
 - **Validation**: Basic data validation to ensure correct input.
 - **Responsive UI**: User-friendly interface built with **Bootstrap** for responsive design.
+- **Logging**: Application logging implemented using NLog for tracking errors and activities.
 
 ---
 
@@ -43,6 +46,7 @@ The **StudentPortal** is a web application designed to manage student records. U
 - **Entity Framework**: ORM for managing database interactions.
 - **SQL Server**: Database to store student information.
 - **Bootstrap**: Frontend framework for styling and responsive design.
+- **NLog**: Logging framework for capturing application logs.
 
 ---
 
@@ -97,9 +101,47 @@ The **StudentPortal** is a web application designed to manage student records. U
 8. **Access the application**:
    After the application is running, open your browser and navigate to http://localhost:5000 (or the port specified in the output).
 
-
 ---
 
+## Logging
+
+Logging is implemented using **NLog** to capture application events and errors. The logging system is structured as follows:
+
+- **ILoggingService**: Interface that defines the logging contract.
+- **LoggingService**: Implements `ILoggingService` and uses **NLog** to log messages.
+- **NLog Configuration**: Configured in `nlog.config` to log messages to a file.
+
+### How Logging Works
+- Logs are stored in the `logs` folder within the solution directory.
+- Different log levels such as **Info, Debug, Error, and Warning** are supported.
+- The logging service is injected into controllers and services using **dependency injection**.
+
+### Example Usage in a Controller
+```csharp
+public class StudentController : Controller
+{
+    private readonly ILoggingService _logger;
+
+    public StudentController(ILoggingService logger)
+    {
+        _logger = logger;
+    }
+
+    public IActionResult Index()
+    {
+        _logger.LogInfo("Student list page accessed.");
+        return View();
+    }
+}
+```
+
+### Example Log Output
+```
+2025-02-04 10:00:00 | INFO | Student list page accessed.
+2025-02-04 10:05:00 | ERROR | An error occurred while fetching student data.
+```
+
+---
 ## Usage
 
 1. **Add a Student**:
